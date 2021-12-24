@@ -4,8 +4,293 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/menubar_custome"
+        android:orientation="horizontal"
+        android:weightSum="15">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="10"
+                android:src="@drawable/avata" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:fitsSystemWindows="true"
+                android:src="@drawable/gemBlue" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/ui_bar" />
+
+                <TextView
+                    android:id="@+id/txtGem"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:paddingRight="10dp"
+                    android:text="12345"
+                    android:textColor="@color/white"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:fitsSystemWindows="true"
+                android:src="@drawable/ui_bolt" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/ui_bar" />
+
+                <TextView
+                    android:id="@+id/txtEnergy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:paddingRight="10dp"
+                    android:text="12345"
+                    android:textColor="@color/white"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:fitsSystemWindows="true"
+                android:src="@drawable/ui_coin" />
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:fitsSystemWindows="true"
+                    android:src="@drawable/ui_bar" />
+
+                <TextView
+                    android:id="@+id/txtCoin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|right"
+                    android:paddingRight="10dp"
+                    android:text="12345"
+                    android:textColor="@color/white"
+                    android:textSize="10dp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_award" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_leader" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_volume" />
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_settings" />
+            </LinearLayout>
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:gravity="center|center_vertical"
+            android:orientation="vertical"
+            android:paddingTop="50dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_up_4" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_up_2" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_up_3" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_left_1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/boss_down" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_right_1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_down_1" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_down_2" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/player_down_3" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingTop="50dp">
+
+            <ImageButton
+                android:id="@+id/btnStart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_start" />
+
+            <ImageButton
+                android:id="@+id/btnHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_help" />
+
+            <ImageButton
+                android:id="@+id/btnExit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_exit" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>
