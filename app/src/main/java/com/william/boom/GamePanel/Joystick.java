@@ -1,8 +1,10 @@
-package com.william.boom;
+package com.william.boom.GamePanel;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import com.william.boom.Common.Utils;
 
 public class Joystick {
 

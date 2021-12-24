@@ -1,4 +1,4 @@
-package com.william.boom;
+package com.william.boom.Common;
 
 public class Utils {
 

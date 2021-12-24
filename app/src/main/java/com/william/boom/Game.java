@@ -10,10 +10,13 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
-import com.william.boom.Object.Boom;
-import com.william.boom.Object.Circle;
-import com.william.boom.Object.Enemy;
-import com.william.boom.Object.Player;
+import com.william.boom.GameObject.Boom;
+import com.william.boom.GameObject.Circle;
+import com.william.boom.GameObject.Enemy;
+import com.william.boom.GameObject.Player;
+import com.william.boom.GamePanel.GameOver;
+import com.william.boom.GamePanel.Joystick;
+import com.william.boom.GamePanel.Performance;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,12 +31,17 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
+
     private GameLoop gameLoop;
+    private GameOver gameOver;
 
     private List<Enemy> enemyList = new ArrayList<Enemy>();
     private List<Boom> boomList = new ArrayList<Boom>();
+
     private int joystickPointerId = 0;
     private int numberOfBoomToDrop = 0;
+    private Performance performance;
+
 
     public Game(Context context) {
         super(context);
@@ -44,9 +52,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         gameLoop = new GameLoop(this, surfaceHolder);
 
-        //Initialize player
+        //Initialize game panels
+        gameOver = new GameOver(context);
+        performance = new Performance(context, gameLoop);
         joystick = new Joystick(275, 750, 70, 40);
-        player = new Player(getContext(), joystick, 500, 500, 30);
+
+        //Initialize player
+        player = new Player(context, joystick, 500, 500, 30);
 
         setFocusable(true);
     }
@@ -92,6 +104,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+        if (gameLoop.getState().equals(Thread.State.TERMINATED)){
+            gameLoop = new GameLoop(this,surfaceHolder);
+        }
         gameLoop.startLoop();
     }
 
@@ -108,10 +123,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        drawUPS(canvas);
-        drawFPS(canvas);
 
+        //draw game panels
+        performance.drawUPS(canvas);
+        performance.drawFPS(canvas);
+        performance.draw(canvas);
         joystick.draw(canvas);
+
+        //draw Object
         player.draw(canvas, "player");
         for (Enemy enemy : enemyList) {
             enemy.draw(canvas, "enemy");
@@ -119,27 +138,21 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         for (Boom boom : boomList) {
             boom.draw(canvas, "boom");
         }
+
+        //Draw Game Over
+        if (player.getHealth() <= 0) {
+            gameOver.draw(canvas);
+        }
     }
 
-    public void drawUPS(Canvas canvas) {
-        String averageUPS = Double.toString(gameLoop.getAverageUPS());
-        Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.red);
-        paint.setColor(color);
-        paint.setTextSize(30);
-        canvas.drawText("UPS: " + averageUPS, 50, 50, paint);
-    }
-
-    public void drawFPS(Canvas canvas) {
-        String averageFPS = Double.toString(gameLoop.getAverageFPS());
-        Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.red);
-        paint.setColor(color);
-        paint.setTextSize(30);
-        canvas.drawText("FPS: " + averageFPS, 50, 100, paint);
-    }
 
     public void update() {
+        //Stop updating the game if the player is death
+        if (player.getHealth() <= 0) {
+            return;
+        }
+
+        //Update game state
         joystick.update();
         player.update();
 
@@ -149,8 +162,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //Update state of each enemy
-        while (numberOfBoomToDrop>0){
-            boomList.add(new Boom(getContext(),player));
+        while (numberOfBoomToDrop > 0) {
+            boomList.add(new Boom(getContext(), player));
             numberOfBoomToDrop--;
         }
         for (Enemy enemy : enemyList) {
@@ -170,6 +183,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             if (Circle.isColliding(enemy, player)) {
                 //Remove enemy if it colides with the player
                 IEnemy.remove();
+                player.setHealth(player.getHealth() - 1);
                 continue;
             }
             Iterator<Boom> IBoom = boomList.iterator();
@@ -184,5 +198,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
+    }
+
+    public void pause() {
+        gameLoop.stopLoop();
     }
 }

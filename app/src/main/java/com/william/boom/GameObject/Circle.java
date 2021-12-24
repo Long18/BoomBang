@@ -1,4 +1,4 @@
-package com.william.boom.Object;
+package com.william.boom.GameObject;
 
 import android.content.Context;
 import android.graphics.Bitmap;

@@ -13,4 +13,5 @@
     <color name="fade">#00815E5B</color>
     <color name="enemy">#00BCD4</color>
     <color name="boom">#2196F3</color>
+    <color name="gameOver">#9FF44336</color>
 </resources>

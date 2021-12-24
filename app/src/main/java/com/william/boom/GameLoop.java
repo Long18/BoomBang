@@ -1,6 +1,7 @@
 package com.william.boom;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameLoop extends Thread {
@@ -28,12 +29,14 @@ public class GameLoop extends Thread {
     }
 
     public void startLoop() {
+        Log.d("GameLoop: ","startLoop");
         isRunning = true;
         start();
     }
 
     @Override
     public void run() {
+        Log.d("GameLoop: ","run");
         super.run();
 
         //Decalre time and cycle count variables
@@ -97,6 +100,17 @@ public class GameLoop extends Thread {
                 frameCount = 0;
                 startTime = System.currentTimeMillis();
             }
+        }
+    }
+
+    public void stopLoop() {
+        Log.d("GameLoop: ","stopLoop");
+        isRunning = false;
+        //Wait for thread to join
+        try{
+            join();
+        }catch (InterruptedException e){
+            e.printStackTrace();
         }
     }
 }
