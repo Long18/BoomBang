@@ -266,40 +266,38 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
             android:orientation="vertical"
             android:paddingTop="20dp">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnStart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/btn_raw"
                 android:text="SINGLE PLAY"
-                android:textColor="@color/white"
                 android:textAlignment="center"
+                android:textColor="@color/white"
                 android:textSize="32dp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnHelp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:textColor="@color/white"
                 android:background="@drawable/btn_raw"
                 android:text="MULTIPLAY"
+                android:textColor="@color/white"
                 android:textSize="32dp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnExit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/btn_raw"
                 android:text="HELP"
+                android:textColor="@color/white"
                 android:textSize="32dp" />
         </LinearLayout>
 

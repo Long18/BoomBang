@@ -1,6 +1,7 @@
 package com.william.boom;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnStart;
+    AppCompatButton btnStart;
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
