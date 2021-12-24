@@ -63,6 +63,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         setFocusable(true);
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
