@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton btnStart;
+    Button btnStart;
 
     View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
