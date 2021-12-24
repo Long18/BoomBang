@@ -34,8 +34,8 @@ public abstract class Circle extends GameObject {
     /**
      * isColliding check if two circle object are colliding
      * based on their positions and radius
-     * @param obj1
-     * @param obj2
+     * @param obj1 is Enemy List
+     * @param obj2 is the Player
      * @return
      */
     public static boolean isColliding(Circle obj1, Circle obj2) {
@@ -52,16 +52,19 @@ public abstract class Circle extends GameObject {
         return radius;
     }
 
-    public void draw(Canvas canvas, Boolean isPlayer) {
+    public void draw(Canvas canvas, String obj) {
 
         //Get drawable and draw in screen
         Bitmap bitmap;
-        if (isPlayer) {
+        if (obj == "player") {
             bitmap = BitmapFactory
                     .decodeResource(context.getResources(), R.drawable.bomber_down);
-        } else {
+        } else if (obj == "enemy"){
             bitmap = BitmapFactory
                     .decodeResource(context.getResources(), R.drawable.boss_down);
+        }else /*if (obj == "boom")*/{
+            bitmap = BitmapFactory
+                    .decodeResource(context.getResources(), R.drawable.boom1);
         }
         bitmap = Common.scaleBitmap(bitmap, 100, 100);
 

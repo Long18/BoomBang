@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
+import com.william.boom.Object.Boom;
 import com.william.boom.Object.Circle;
 import com.william.boom.Object.Enemy;
 import com.william.boom.Object.Player;
@@ -27,10 +28,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
-    //private final Enemy enemy;
     private GameLoop gameLoop;
 
     private List<Enemy> enemyList = new ArrayList<Enemy>();
+    private List<Boom> boomList = new ArrayList<Boom>();
+    private int joystickPointerId = 0;
+    private int numberOfBoomToDrop = 0;
 
     public Game(Context context) {
         super(context);
@@ -44,7 +47,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Initialize player
         joystick = new Joystick(275, 750, 70, 40);
         player = new Player(getContext(), joystick, 500, 500, 30);
-        //enemy = new Enemy(getContext(),player,500,200,30);
 
         setFocusable(true);
     }
@@ -53,20 +55,35 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public boolean onTouchEvent(MotionEvent event) {
 
         //Handle touch event actions
-        switch (event.getAction()) {
+        switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
-                if (joystick.isPressed((double) event.getX(), (double) event.getY())) {
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (joystick.getIsPressed()) {
+                    //When joystick was pressed before this event -> drop boom
+                    numberOfBoomToDrop++;
+                } else if (joystick.isPressed((double) event.getX(), (double) event.getY())) {
+                    //Joystick is pressed in this event -> setIsPressed(true) and store ID
+                    joystickPointerId = event.getPointerId(event.getActionIndex());
                     joystick.setIsPressed(true);
+                } else {
+                    //Joystick was not previously, and is not pressed in this event -> drop boom
+                    numberOfBoomToDrop++;
+
                 }
                 return true;
             case MotionEvent.ACTION_MOVE:
+                //Joystick was pressed previously and is now moved
                 if (joystick.getIsPressed()) {
                     joystick.setActuator((double) event.getX(), (double) event.getY());
                 }
                 return true;
             case MotionEvent.ACTION_UP:
-                joystick.setIsPressed(false);
-                joystick.resetActuator();
+            case MotionEvent.ACTION_POINTER_UP:
+                if (joystickPointerId == event.getPointerId(event.getActionIndex())) {
+                    //Joystick was let go of -> setIsPressed(false) and resetActuator
+                    joystick.setIsPressed(false);
+                    joystick.resetActuator();
+                }
                 return true;
         }
 
@@ -95,9 +112,12 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawFPS(canvas);
 
         joystick.draw(canvas);
-        player.draw(canvas, true);
+        player.draw(canvas, "player");
         for (Enemy enemy : enemyList) {
-            enemy.draw(canvas, false);
+            enemy.draw(canvas, "enemy");
+        }
+        for (Boom boom : boomList) {
+            boom.draw(canvas, "boom");
         }
     }
 
@@ -129,17 +149,40 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         //Update state of each enemy
+        while (numberOfBoomToDrop>0){
+            boomList.add(new Boom(getContext(),player));
+            numberOfBoomToDrop--;
+        }
         for (Enemy enemy : enemyList) {
             enemy.update();
         }
 
-        //Iterate through enemyList and check for collision between each enemy and the player
+        //Update state of each boom
+        for (Boom boom : boomList) {
+            boom.update();
+        }
+
+        //Iterate through enemyList and check for collision
+        //between each enemy, the player and boom
         Iterator<Enemy> IEnemy = enemyList.iterator();
         while (IEnemy.hasNext()) {
-            if (Circle.isColliding(IEnemy.next(), player)) {
+            Circle enemy = IEnemy.next();
+            if (Circle.isColliding(enemy, player)) {
                 //Remove enemy if it colides with the player
                 IEnemy.remove();
+                continue;
+            }
+            Iterator<Boom> IBoom = boomList.iterator();
+            while (IBoom.hasNext()) {
+                Circle boom = IBoom.next();
+                //Remove boom if it collides with an enemy
+                if (Circle.isColliding(boom, enemy)) {
+                    IBoom.remove();
+                    IEnemy.remove();
+                    break;
+                }
             }
         }
+
     }
 }
