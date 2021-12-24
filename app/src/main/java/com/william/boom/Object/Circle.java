@@ -1,4 +1,4 @@
-package com.william.boom;
+package com.william.boom.Object;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,6 +8,7 @@ import android.graphics.Paint;
 
 
 import com.william.boom.Common.Common;
+import com.william.boom.R;
 
 /**
  * Circle is an abstract class which implement a draw method from
@@ -30,10 +31,17 @@ public abstract class Circle extends GameObject {
         paint.setColor(color);
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas, Boolean isPlayer) {
 
         //Get drawable and draw in screen
-        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.bomber_down);
+        Bitmap bitmap;
+        if (isPlayer) {
+            bitmap = BitmapFactory
+                    .decodeResource(context.getResources(), R.drawable.bomber_down);
+        } else {
+            bitmap = BitmapFactory
+                    .decodeResource(context.getResources(), R.drawable.boss_down);
+        }
         bitmap = Common.scaleBitmap(bitmap, 100, 100);
 
         //Get width and height of bitmap
@@ -46,4 +54,6 @@ public abstract class Circle extends GameObject {
 
         canvas.drawBitmap(bitmap, boardPosX, boardPosY, null);
     }
+
+
 }

@@ -11,4 +11,5 @@
 
     <color name="red">#FA5858</color>
     <color name="fade">#00815E5B</color>
+    <color name="enemy">#00BCD4</color>
 </resources>
