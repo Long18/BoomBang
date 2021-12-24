@@ -15,11 +15,46 @@ public class Enemy extends Circle {
     private static final double SPEED_PIXELS_PER_SECOND = Player.SPEED_PIXELS_PER_SECOND * 0.6;
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
 
+    private static final double SPAWNS_PER_MINUTE = 20;
+    private static final double SPAWNS_PER_SECOND = SPAWNS_PER_MINUTE / 60.0;
+    private static final double UPDATES_PER_SPAWN = GameLoop.MAX_UPS / SPAWNS_PER_SECOND;
+    /**
+     * @param updateUNS = update Until Next Spawn.
+     */
+    private static double updatesUNS = UPDATES_PER_SPAWN;
+
     private final Player player;
 
     public Enemy(Context context, Player player, double positionX, double positionY, double radius) {
         super(context, ContextCompat.getColor(context, R.color.enemy), positionX, positionY, radius);
         this.player = player;
+    }
+
+    public Enemy(Context context, Player player) {
+        super(
+                context,
+                ContextCompat.getColor(context, R.color.enemy),
+                Math.random()*1000,
+                Math.random()*1000,
+                30
+        );
+        this.player = player;
+    }
+
+    /**
+     * readyToSpawn checks if a new enemy should spawn, according to the decided number of spawns
+     * per minute ( Check SPAWNS_PER_MINUTE at top )
+     *
+     * @return
+     */
+    public static boolean readyToSpawn() {
+        if (updatesUNS <= 0) {
+            updatesUNS += UPDATES_PER_SPAWN;
+            return true;
+        } else {
+            updatesUNS--;
+            return false;
+        }
     }
 
     @Override
