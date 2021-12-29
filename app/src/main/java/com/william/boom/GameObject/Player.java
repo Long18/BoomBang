@@ -1,11 +1,15 @@
 package com.william.boom.GameObject;
 
 import android.content.Context;
+import android.graphics.Canvas;
 
 import androidx.core.content.ContextCompat;
 
+import com.william.boom.Graphics.Animator;
+import com.william.boom.Graphics.GameDisplay;
 import com.william.boom.GameLoop;
 import com.william.boom.GamePanel.Joystick;
+import com.william.boom.Graphics.Sprite;
 import com.william.boom.R;
 import com.william.boom.Common.Utils;
 
@@ -17,11 +21,16 @@ public class Player extends Circle {
     public static final double SPEED_PIXELS_PER_SECOND = 400.0;
     public static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
     public static int HEALTH = 1;
-    private final Joystick joystick;
 
-    public Player(Context context, Joystick joystick, double positionX, double positionY, double radius) {
+    private final Joystick joystick;
+    private Animator animator;
+    private PlayerState playerState;
+
+    public Player(Context context, Joystick joystick, double positionX, double positionY, double radius, Animator animator) {
         super(context, ContextCompat.getColor(context, R.color.red), positionX, positionY, radius);
         this.joystick = joystick;
+        this.animator = animator;
+        this.playerState = new PlayerState(this);
 
     }
 
@@ -41,11 +50,28 @@ public class Player extends Circle {
             directionX = velocityX / distance;
             directionY = velocityY / distance;
         }
+
+        //Update State
+        playerState.update();
     }
 
     public void setPosition(double positionX, double positionY) {
         this.positionX = positionX;
         this.positionY = positionY;
+    }
+
+    public void draw(Canvas canvas, String obj, GameDisplay gameDisplay) {
+        //super.draw(canvas, obj, gameDisplay);
+        animator.draw(canvas, gameDisplay, this);
+
+    }
+
+    public double getPositionX() {
+        return positionX;
+    }
+
+    public double getPositionY() {
+        return positionY;
     }
 
     public int getHealth() {
@@ -55,5 +81,9 @@ public class Player extends Circle {
     public void setHealth(int healthPoint) {
         if (HEALTH >= 0)
             this.HEALTH = healthPoint;
+    }
+
+    public PlayerState getPlayerState() {
+        return playerState;
     }
 }

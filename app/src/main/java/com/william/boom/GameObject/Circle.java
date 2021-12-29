@@ -8,6 +8,7 @@ import android.graphics.Paint;
 
 
 import com.william.boom.Common.Common;
+import com.william.boom.Graphics.GameDisplay;
 import com.william.boom.R;
 
 /**
@@ -34,16 +35,17 @@ public abstract class Circle extends GameObject {
     /**
      * isColliding check if two circle object are colliding
      * based on their positions and radius
+     *
      * @param obj1 is Enemy List
      * @param obj2 is the Player
      * @return
      */
     public static boolean isColliding(Circle obj1, Circle obj2) {
-        double distance = getDistanceBetweenObject(obj1,obj2);
+        double distance = getDistanceBetweenObject(obj1, obj2);
         double distanceToCollision = obj1.getRadius() + obj2.getRadius();
-        if (distance < distanceToCollision){
+        if (distance < distanceToCollision) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -52,17 +54,17 @@ public abstract class Circle extends GameObject {
         return radius;
     }
 
-    public void draw(Canvas canvas, String obj) {
+    public void draw(Canvas canvas, String obj, GameDisplay gameDisplay) {
 
         //Get drawable and draw in screen
         Bitmap bitmap;
         if (obj == "player") {
             bitmap = BitmapFactory
                     .decodeResource(context.getResources(), R.drawable.bomber_down);
-        } else if (obj == "enemy"){
+        } else if (obj == "enemy") {
             bitmap = BitmapFactory
                     .decodeResource(context.getResources(), R.drawable.boss_down);
-        }else /*if (obj == "boom")*/{
+        } else /*if (obj == "boom")*/ {
             bitmap = BitmapFactory
                     .decodeResource(context.getResources(), R.drawable.boom1);
         }
@@ -76,7 +78,11 @@ public abstract class Circle extends GameObject {
         float boardPosX = (float) (positionX - bitmapX);
         float boardPosY = (float) (positionY - bitmapY);
 
-        canvas.drawBitmap(bitmap, boardPosX, boardPosY, null);
+        canvas.drawBitmap(
+                bitmap,
+                (float) gameDisplay.gameToDisplayX(boardPosX),
+                (float) gameDisplay.gameToDisplayY(boardPosY),
+                paint);
     }
 
 

@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Game game;
     AppCompatButton btnStart;
 
     View.OnClickListener onClickListener = new View.OnClickListener() {

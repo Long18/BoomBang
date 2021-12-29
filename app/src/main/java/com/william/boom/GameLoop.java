@@ -23,7 +23,6 @@ public class GameLoop extends Thread {
     public double getAverageUPS() {
         return averageUPS;
     }
-
     public double getAverageFPS() {
         return averageFPS;
     }

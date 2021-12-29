@@ -1,14 +1,14 @@
 package com.william.boom;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 
 import com.william.boom.GameObject.Boom;
 import com.william.boom.GameObject.Circle;
@@ -17,6 +17,10 @@ import com.william.boom.GameObject.Player;
 import com.william.boom.GamePanel.GameOver;
 import com.william.boom.GamePanel.Joystick;
 import com.william.boom.GamePanel.Performance;
+import com.william.boom.GamePanel.ServerRequest;
+import com.william.boom.Graphics.Animator;
+import com.william.boom.Graphics.GameDisplay;
+import com.william.boom.Graphics.SpriteSheet;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -31,6 +35,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
+    //private final Guest guest;
+    private ServerRequest serverRequest;
 
     private GameLoop gameLoop;
     private GameOver gameOver;
@@ -41,6 +47,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     private int joystickPointerId = 0;
     private int numberOfBoomToDrop = 0;
     private Performance performance;
+    private GameDisplay gameDisplay;
 
 
     public Game(Context context) {
@@ -58,7 +65,19 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         joystick = new Joystick(275, 750, 70, 40);
 
         //Initialize player
-        player = new Player(context, joystick, 500, 500, 30);
+        SpriteSheet spriteSheet = new SpriteSheet(context);
+        Animator animator = new Animator(spriteSheet.getPlayerSpriteArray());
+        player = new Player(context, joystick, 500, 500, 30,animator);
+
+        //guest = new Guest(context,R.color.colorPrimary,serverRequest.getPositionX(),serverRequest.getPositionY(),30);
+
+        //Initialize gameDisplay and center it around player
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        gameDisplay = new GameDisplay(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+
+        //Initialize server
+        serverRequest = new ServerRequest(player);
 
         setFocusable(true);
     }
@@ -115,7 +134,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
-
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
@@ -132,12 +150,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         joystick.draw(canvas);
 
         //draw Object
-        player.draw(canvas, "player");
+        player.draw(canvas, "player",gameDisplay);
+        //guest.draw(canvas,"player");
+
         for (Enemy enemy : enemyList) {
-            enemy.draw(canvas, "enemy");
+            enemy.draw(canvas, "enemy",gameDisplay);
         }
         for (Boom boom : boomList) {
-            boom.draw(canvas, "boom");
+            boom.draw(canvas, "boom",gameDisplay);
         }
 
         //Draw Game Over
@@ -156,6 +176,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Update game state
         joystick.update();
         player.update();
+
+        //Update server
+        serverRequest.sendToServer();
 
         //Spawn enemy if is the first time to spawn new enemies
         if (Enemy.readyToSpawn()) {
@@ -182,7 +205,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         while (IEnemy.hasNext()) {
             Circle enemy = IEnemy.next();
             if (Circle.isColliding(enemy, player)) {
-                //Remove enemy if it colides with the player
+                //Remove enemy if it collides with the player
                 IEnemy.remove();
                 player.setHealth(player.getHealth() - 1);
                 continue;
@@ -198,6 +221,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 }
             }
         }
+        gameDisplay.update();
 
     }
 

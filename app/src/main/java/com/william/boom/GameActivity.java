@@ -30,4 +30,6 @@ public class GameActivity extends AppCompatActivity {
         game.pause();
         super.onPause();
     }
+
+
 }
