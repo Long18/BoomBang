@@ -1,25 +1,21 @@
-package com.william.boom.Graphics;
+package com.william.boom.Graphics.Enemy;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-/**
- * Sprite is
- */
-public class Sprite {
-
-    private final SpriteSheet spriteSheet;
+public class SpriteEnemy {
+    private final SpriteSheetEnemy spriteSheetEnemy;
     private final Rect rect;
 
-    public Sprite(SpriteSheet spriteSheet, Rect rect) {
-        this.spriteSheet = spriteSheet;
+    public SpriteEnemy(SpriteSheetEnemy spriteSheetEnemy, Rect rect) {
+        this.spriteSheetEnemy = spriteSheetEnemy;
         this.rect = rect;
 
     }
 
     public void draw(Canvas canvas, int x, int y) {
         canvas.drawBitmap(
-                spriteSheet.getBitmap(),
+                spriteSheetEnemy.getBitmap(),
                 rect,
                 new Rect(x,y,x+getWidth()*2,y+getHeight()*2),
                 null

@@ -1,22 +1,22 @@
 package com.william.boom.GameObject;
-
 /**
- * PlayerState to check sprite of character
+ * EnemyState to check sprite of enemy
  */
-public class PlayerState {
+public class EnemyState {
 
     public enum State{
         NOT_MOVING,
         STARED_MOVING,
-        IS_MOVING
+        IS_MOVING,
+        IS_DEAD
 
     }
 
-    private Player player;
+    private Enemy enemy;
     private State state;
 
-    public PlayerState(Player player){
-        this.player = player;
+    public EnemyState(Enemy enemy){
+        this.enemy = enemy;
         this.state = State.NOT_MOVING;
     }
 
@@ -27,17 +27,17 @@ public class PlayerState {
     public void update(){
         switch (state){
             case NOT_MOVING:
-                if (player.velocityX != 0 || player.velocityY != 0){
+                if (enemy.velocityX != 0 || enemy.velocityY != 0){
                     state = State.STARED_MOVING;
                 }
                 break;
             case STARED_MOVING:
-                if (player.velocityX != 0 || player.velocityY != 0){
+                if (enemy.velocityX != 0 || enemy.velocityY != 0){
                     state = State.IS_MOVING;
                 }
                 break;
             case IS_MOVING:
-                if (player.velocityX == 0 && player.velocityY ==0){
+                if (enemy.velocityX == 0 && enemy.velocityY ==0){
                     state = State.NOT_MOVING;
                 }
                 break;

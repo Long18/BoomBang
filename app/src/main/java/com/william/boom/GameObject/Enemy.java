@@ -1,10 +1,13 @@
 package com.william.boom.GameObject;
 
 import android.content.Context;
+import android.graphics.Canvas;
 
 import androidx.core.content.ContextCompat;
 
 import com.william.boom.GameLoop;
+import com.william.boom.Graphics.Enemy.AnimatorEnemy;
+import com.william.boom.Graphics.GameDisplay;
 import com.william.boom.R;
 
 /**
@@ -24,21 +27,20 @@ public class Enemy extends Circle {
     private static double updatesUNS = UPDATES_PER_SPAWN;
 
     private final Player player;
+    private AnimatorEnemy animatorEnemy;
+    private EnemyState enemyState;
 
-    public Enemy(Context context, Player player, double positionX, double positionY, double radius) {
-        super(context, ContextCompat.getColor(context, R.color.enemy), positionX, positionY, radius);
-        this.player = player;
-    }
-
-    public Enemy(Context context, Player player) {
+    public Enemy(Context context, Player player, AnimatorEnemy animatorEnemy) {
         super(
                 context,
                 ContextCompat.getColor(context, R.color.enemy),
-                Math.random()*1000,
-                Math.random()*1000,
+                Math.random() * 1000,
+                Math.random() * 1000,
                 30
         );
         this.player = player;
+        this.animatorEnemy = animatorEnemy;
+        this.enemyState = new EnemyState(this);
     }
 
     /**
@@ -87,5 +89,17 @@ public class Enemy extends Circle {
         //Update the position of the enemy
         positionX += velocityX;
         positionY += velocityY;
+
+        //Update State
+        enemyState.update();
+    }
+
+    public void draw(Canvas canvas, String obj, GameDisplay gameDisplay) {
+        animatorEnemy.draw(canvas, gameDisplay, this);
+
+    }
+
+    public EnemyState getEnemyState() {
+        return enemyState;
     }
 }

@@ -18,9 +18,11 @@ import com.william.boom.GamePanel.GameOver;
 import com.william.boom.GamePanel.Joystick;
 import com.william.boom.GamePanel.Performance;
 import com.william.boom.GamePanel.ServerRequest;
-import com.william.boom.Graphics.Animator;
+import com.william.boom.Graphics.Enemy.AnimatorEnemy;
+import com.william.boom.Graphics.Player.AnimatorPlayer;
 import com.william.boom.Graphics.GameDisplay;
-import com.william.boom.Graphics.SpriteSheet;
+import com.william.boom.Graphics.Enemy.SpriteSheetEnemy;
+import com.william.boom.Graphics.Player.SpriteSheetPlayer;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,8 +37,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
-    //private final Guest guest;
     private ServerRequest serverRequest;
+    //private final Guest guest;
 
     private GameLoop gameLoop;
     private GameOver gameOver;
@@ -65,9 +67,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         joystick = new Joystick(275, 750, 70, 40);
 
         //Initialize player
-        SpriteSheet spriteSheet = new SpriteSheet(context);
-        Animator animator = new Animator(spriteSheet.getPlayerSpriteArray());
-        player = new Player(context, joystick, 500, 500, 30,animator);
+        SpriteSheetPlayer spriteSheetPlayer = new SpriteSheetPlayer(context);
+        AnimatorPlayer animatorPlayer = new AnimatorPlayer(spriteSheetPlayer.getPlayerSpriteArray());
+        player = new Player(context, joystick, 500, 500, 30, animatorPlayer);
 
         //guest = new Guest(context,R.color.colorPrimary,serverRequest.getPositionX(),serverRequest.getPositionY(),30);
 
@@ -182,7 +184,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         //Spawn enemy if is the first time to spawn new enemies
         if (Enemy.readyToSpawn()) {
-            enemyList.add(new Enemy(getContext(), player));
+            SpriteSheetEnemy spriteSheetEnemy = new SpriteSheetEnemy(getContext());
+            AnimatorEnemy animatorEnemy = new AnimatorEnemy(spriteSheetEnemy.getEnemySpriteArray());
+            enemyList.add(new Enemy(getContext(), player, animatorEnemy));
         }
 
         //Update state of each enemy

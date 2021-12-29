@@ -1,33 +1,33 @@
-package com.william.boom.Graphics;
+package com.william.boom.Graphics.Player;
 
 import android.graphics.Canvas;
 
 import com.william.boom.GameObject.Player;
-import com.william.boom.GameObject.PlayerState;
+import com.william.boom.Graphics.GameDisplay;
 
 /**
  * Animator to make motion of sprite
  */
-public class Animator {
-    private Sprite[] playerSpriteArray;
+public class AnimatorPlayer {
+    private SpritePlayer[] playerSpritePlayerArray;
 
     private static final int MAX_UPDATE_FRAME = 5;
     private int updatesBeforeNextMoveFrame;
     private int indexNotMovingFrame = 0;
     private int indexMovingFrame = 1;
 
-    public Animator(Sprite[] playerSpriteArray) {
-        this.playerSpriteArray = playerSpriteArray;
+    public AnimatorPlayer(SpritePlayer[] playerSpritePlayerArray) {
+        this.playerSpritePlayerArray = playerSpritePlayerArray;
     }
 
     public void draw(Canvas canvas, GameDisplay gameDisplay, Player player) {
         switch (player.getPlayerState().getState()) {
             case NOT_MOVING:
-                drawFrame(canvas, gameDisplay, player, playerSpriteArray[indexNotMovingFrame]);
+                drawFrame(canvas, gameDisplay, player, playerSpritePlayerArray[indexNotMovingFrame]);
                 break;
             case STARED_MOVING:
                 updatesBeforeNextMoveFrame = MAX_UPDATE_FRAME;
-                drawFrame(canvas, gameDisplay, player, playerSpriteArray[indexMovingFrame]);
+                drawFrame(canvas, gameDisplay, player, playerSpritePlayerArray[indexMovingFrame]);
                 break;
             case IS_MOVING:
                 updatesBeforeNextMoveFrame--;
@@ -35,7 +35,7 @@ public class Animator {
                     updatesBeforeNextMoveFrame = MAX_UPDATE_FRAME;
                     toggleIndexMovingFrame();
                 }
-                drawFrame(canvas, gameDisplay, player, playerSpriteArray[indexMovingFrame]);
+                drawFrame(canvas, gameDisplay, player, playerSpritePlayerArray[indexMovingFrame]);
                 break;
             default:
                 break;
@@ -55,10 +55,10 @@ public class Animator {
         }
     }
 
-    public void drawFrame(Canvas canvas, GameDisplay gameDisplay, Player player, Sprite sprite) {
-        sprite.draw(
+    public void drawFrame(Canvas canvas, GameDisplay gameDisplay, Player player, SpritePlayer spritePlayer) {
+        spritePlayer.draw(
                 canvas,
-                (int) gameDisplay.gameToDisplayX(player.getPositionX() - sprite.getWidth() / 2),
-                (int) gameDisplay.gameToDisplayY(player.getPositionY()) - sprite.getHeight() / 2);
+                (int) gameDisplay.gameToDisplayX(player.getPositionX() - spritePlayer.getWidth() / 2),
+                (int) gameDisplay.gameToDisplayY(player.getPositionY()) - spritePlayer.getHeight() / 2);
     }
 }
