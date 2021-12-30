@@ -67,7 +67,6 @@ public class Player extends Circle {
     public double getPositionX() {
         return positionX;
     }
-
     public double getPositionY() {
         return positionY;
     }
@@ -75,7 +74,6 @@ public class Player extends Circle {
     public int getHealth() {
         return HEALTH;
     }
-
     public void setHealth(int healthPoint) {
         if (HEALTH >= 0)
             this.HEALTH = healthPoint;

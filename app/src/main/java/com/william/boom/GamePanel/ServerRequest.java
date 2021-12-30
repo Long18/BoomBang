@@ -1,6 +1,8 @@
 package com.william.boom.GamePanel;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.microsoft.signalr.HubConnection;
@@ -11,40 +13,76 @@ import com.william.boom.GameObject.Player;
 /**
  * ServerRequest is the class to send information to server
  */
-public class ServerRequest {
+public class ServerRequest extends Thread {
     private HubConnection hubConnection;
     private Player player;
-    private float positionXSV, positionYSV;
 
-    public ServerRequest(Player player) {
+    private Context context;
+
+    private float positionXSV, positionYSV;
+    String abc = "asdas", bcd = "asdsd";
+
+    public ServerRequest(Player player, Context context) {
         this.player = player;
+        this.context = context;
     }
 
-    public void sendToServer() {
-        hubConnection = HubConnectionBuilder.create("https://10.0.2.2:7110/movehub").build();
+    public void update() {
+        hubConnection = HubConnectionBuilder.create("http://thanhlongboom.somee.com/chatHub").build();
+
+        positionXSV = (float) getPositionX();
+        positionYSV = (float) getPositionY();
 
         hubConnection.on("ReceivePosition", (positionX, positionY) -> {
-
-            this.positionXSV = positionX;
-            this.positionYSV = positionY;
+            try {
+                ((Activity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        positionXSV = positionX;
+                        positionYSV = positionY;
+                    }
+                });
+            } catch (Exception e) {
+                Log.d("BUG:", e.getMessage());
+            }
 
         }, Float.class, Float.class);
 
+        new HubConnectionTask().execute(hubConnection);
+    }
+
+    public void send() {
         if (hubConnection.getConnectionState() == HubConnectionState.DISCONNECTED) {
             hubConnection.start();
         }
 
         if (hubConnection.getConnectionState() == HubConnectionState.CONNECTED) {
-            hubConnection.send("PlayerMoveFromServer", player.getPositionX(), player.getPositionY());
+            hubConnection.send("ReceiveMessage", abc, bcd);
         }
+
+        new HubConnectionTask().execute(hubConnection);
     }
 
     public double getPositionX() {
-        return positionXSV;
+        return player.getPositionX();
     }
 
     public double getPositionY() {
-        return positionYSV;
+        return player.getPositionY();
     }
 
+    private static class HubConnectionTask extends AsyncTask<HubConnection, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(HubConnection... hubConnections) {
+            HubConnection hubConnection = hubConnections[0];
+            hubConnection.start().blockingAwait();
+            return null;
+        }
+    }
 }

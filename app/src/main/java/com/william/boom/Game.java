@@ -23,6 +23,8 @@ import com.william.boom.Graphics.Player.AnimatorPlayer;
 import com.william.boom.Graphics.GameDisplay;
 import com.william.boom.Graphics.Enemy.SpriteSheetEnemy;
 import com.william.boom.Graphics.Player.SpriteSheetPlayer;
+import com.william.boom.Graphics.SpriteSheet;
+import com.william.boom.Map.Tilemap;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,6 +39,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
+    private final Tilemap tilemap;
     private ServerRequest serverRequest;
     //private final Guest guest;
 
@@ -76,10 +79,15 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Initialize gameDisplay and center it around player
         DisplayMetrics displayMetrics = new DisplayMetrics();
         ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        gameDisplay = new GameDisplay(displayMetrics.widthPixels,displayMetrics.heightPixels,player);
+        gameDisplay = new GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player);
+
+        //Initialize Tilemap
+        SpriteSheet spriteSheet = new SpriteSheet(context);
+        tilemap = new Tilemap(spriteSheet);
+
 
         //Initialize server
-        serverRequest = new ServerRequest(player);
+        serverRequest = new ServerRequest(player, context);
 
         setFocusable(true);
     }
@@ -102,6 +110,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                 } else {
                     //Joystick was not previously, and is not pressed in this event -> drop boom
                     numberOfBoomToDrop++;
+                    serverRequest.send();
 
                 }
                 return true;
@@ -126,8 +135,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        if (gameLoop.getState().equals(Thread.State.TERMINATED)){
-            gameLoop = new GameLoop(this,surfaceHolder);
+        if (gameLoop.getState().equals(Thread.State.TERMINATED)) {
+            gameLoop = new GameLoop(this, surfaceHolder);
         }
         gameLoop.startLoop();
     }
@@ -136,6 +145,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
 
     }
+
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
@@ -145,21 +155,25 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        //draw tilemap
+        tilemap.draw(canvas, gameDisplay);
+
         //draw game panels
         performance.drawUPS(canvas);
         performance.drawFPS(canvas);
         performance.draw(canvas);
         joystick.draw(canvas);
 
+
         //draw Object
-        player.draw(canvas, "player",gameDisplay);
+        player.draw(canvas, "player", gameDisplay);
         //guest.draw(canvas,"player");
 
         for (Enemy enemy : enemyList) {
-            enemy.draw(canvas, "enemy",gameDisplay);
+            enemy.draw(canvas, "enemy", gameDisplay);
         }
         for (Boom boom : boomList) {
-            boom.draw(canvas, "boom",gameDisplay);
+            boom.draw(canvas, "boom", gameDisplay);
         }
 
         //Draw Game Over
@@ -167,7 +181,6 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
             gameOver.draw(canvas);
         }
     }
-
 
     public void update() {
         //Stop updating the game if the player is death
@@ -180,7 +193,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         player.update();
 
         //Update server
-        serverRequest.sendToServer();
+        serverRequest.update();
 
         //Spawn enemy if is the first time to spawn new enemies
         if (Enemy.readyToSpawn()) {

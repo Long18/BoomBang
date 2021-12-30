@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 
-    implementation 'com.microsoft.signalr:signalr:3.0.0'
+    implementation 'com.microsoft.signalr:signalr:6.0.1'
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

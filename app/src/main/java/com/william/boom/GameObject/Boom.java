@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.core.content.ContextCompat;
 
 import com.william.boom.GameLoop;
+import com.william.boom.Graphics.GameDisplay;
 import com.william.boom.R;
 
 public class Boom extends Circle {
