@@ -20,7 +20,7 @@ public class SpriteSheet {
     }
 
     public Sprite[] getSpriteArray() {
-        Sprite[] spriteArray = new Sprite[5];
+        Sprite[] spriteArray = new Sprite[6];
         spriteArray[0] = new Sprite(this, new Rect(0 * 64, 0, 1 * 64, 64));
         return spriteArray;
     }

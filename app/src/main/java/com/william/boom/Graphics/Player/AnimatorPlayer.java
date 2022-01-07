@@ -58,7 +58,7 @@ public class AnimatorPlayer {
     public void drawFrame(Canvas canvas, GameDisplay gameDisplay, Player player, SpritePlayer spritePlayer) {
         spritePlayer.draw(
                 canvas,
-                (int) gameDisplay.gameToDisplayX(player.getPositionX() - spritePlayer.getWidth() / 2),
-                (int) gameDisplay.gameToDisplayY(player.getPositionY()) - spritePlayer.getHeight() / 2);
+                (int) gameDisplay.gameToDisplayX(player.getPositionX() - spritePlayer.getWidth() ),
+                (int) gameDisplay.gameToDisplayY(player.getPositionY()) - spritePlayer.getHeight() /2);
     }
 }

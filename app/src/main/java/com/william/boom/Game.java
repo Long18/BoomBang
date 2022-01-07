@@ -72,7 +72,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //Initialize player
         SpriteSheetPlayer spriteSheetPlayer = new SpriteSheetPlayer(context);
         AnimatorPlayer animatorPlayer = new AnimatorPlayer(spriteSheetPlayer.getPlayerSpriteArray());
-        player = new Player(context, joystick, 500, 500, 30, animatorPlayer);
+        player = new Player(context, joystick, 1200, 900, 30, animatorPlayer);
 
         //guest = new Guest(context,R.color.colorPrimary,serverRequest.getPositionX(),serverRequest.getPositionY(),30);
 

@@ -53,6 +53,8 @@ public class Tilemap {
             }
         }
 
+        System.out.println();
+
     }
 
     private Rect getRectByIndex(int idxRow, int idxCol) {

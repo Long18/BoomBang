@@ -9,14 +9,18 @@ import com.william.boom.GameObject.Player;
  * GameDisplay is a class to make Player center with Screen
  */
 public class GameDisplay {
+
     public final Rect DISPLAY_RECT;
+
+    private GameObject centerObject;
+
     private double gameToDisplayCoordinateOffsetX;
     private double gameToDisplayCoordinateOffsetY;
     private double displayCenterX;
     private double displayCenterY;
     private double gameCenterX;
     private double gameCenterY;
-    private GameObject centerObject;
+
     private final int widthPixels;
     private final int heightPixels;
 

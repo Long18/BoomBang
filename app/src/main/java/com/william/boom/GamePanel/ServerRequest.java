@@ -81,7 +81,7 @@ public class ServerRequest extends Thread {
         @Override
         protected Void doInBackground(HubConnection... hubConnections) {
             HubConnection hubConnection = hubConnections[0];
-            hubConnection.start().blockingAwait();
+            //hubConnection.start().blockingAwait();
             return null;
         }
     }
