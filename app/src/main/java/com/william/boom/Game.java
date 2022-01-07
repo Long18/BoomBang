@@ -1,12 +1,16 @@
 package com.william.boom;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +20,7 @@ import com.william.boom.GameObject.Enemy;
 import com.william.boom.GameObject.Player;
 import com.william.boom.GamePanel.GameOver;
 import com.william.boom.GamePanel.Joystick;
+import com.william.boom.GamePanel.Menu;
 import com.william.boom.GamePanel.Performance;
 import com.william.boom.GamePanel.ServerRequest;
 import com.william.boom.Graphics.Enemy.AnimatorEnemy;
@@ -39,20 +44,24 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Player player;
     private final Joystick joystick;
+    private final Menu menu;
     private final Tilemap tilemap;
     private ServerRequest serverRequest;
     //private final Guest guest;
 
     private GameLoop gameLoop;
     private GameOver gameOver;
+    private Activity activity;
 
     private List<Enemy> enemyList = new ArrayList<Enemy>();
     private List<Boom> boomList = new ArrayList<Boom>();
 
     private int joystickPointerId = 0;
+    private int menuPointerId = 0;
     private int numberOfBoomToDrop = 0;
     private Performance performance;
     private GameDisplay gameDisplay;
+    private boolean turnOn = false;
 
 
     public Game(Context context) {
@@ -68,6 +77,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameOver = new GameOver(context);
         performance = new Performance(context, gameLoop);
         joystick = new Joystick(275, 750, 70, 40);
+        menu = new Menu(context,gameLoop,10,10);
+        activity = new Activity();
 
         //Initialize player
         SpriteSheetPlayer spriteSheetPlayer = new SpriteSheetPlayer(context);
@@ -100,6 +111,14 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
+
+                if (menu.getIsPressed()){
+                    pause();
+                }else if (menu.isPressed((double) event.getX(), (double) event.getY())){
+                    menuPointerId = event.getPointerId(event.getActionIndex());
+                    menu.setIsPressed(true);
+                }
+
                 if (joystick.getIsPressed()) {
                     //When joystick was pressed before this event -> drop boom
                     numberOfBoomToDrop++;
@@ -126,6 +145,9 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
                     //Joystick was let go of -> setIsPressed(false) and resetActuator
                     joystick.setIsPressed(false);
                     joystick.resetActuator();
+                }
+                if (menuPointerId == event.getPointerId(event.getActionIndex())) {
+                    menu.setIsPressed(false);
                 }
                 return true;
         }
@@ -158,10 +180,13 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         //draw tilemap
         tilemap.draw(canvas, gameDisplay);
 
+        //draw menu
+        menu.draw(canvas);
+
         //draw game panels
-        performance.drawUPS(canvas);
-        performance.drawFPS(canvas);
-        performance.draw(canvas);
+        if (turnOn) {
+            performance.draw(canvas);
+        }
         joystick.draw(canvas);
 
 
@@ -178,19 +203,30 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
         //Draw Game Over
         if (player.getHealth() <= 0) {
-            gameOver.draw(canvas);
+            //gameOver.draw(canvas);
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    menu.gameOverDialog();
+                }
+            });
         }
     }
+
 
     public void update() {
         //Stop updating the game if the player is death
         if (player.getHealth() <= 0) {
             return;
         }
+        //Stop updating the game if menu is on
+        if (menu.getState()){
+            return;
+        }
 
         //Update game state
         joystick.update();
         player.update();
+        menu.update();
 
         //Update server
         serverRequest.update();
@@ -243,6 +279,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void pause() {
+        menu.showDialog();
         gameLoop.stopLoop();
     }
 }

@@ -17,6 +17,7 @@ public class Joystick {
 
     private Paint innerCirclePaint;
     private Paint outerCirclePaint;
+
     private double joystickCenter;
     private boolean isPressed;
     private double actuatorX;
@@ -112,7 +113,6 @@ public class Joystick {
     public double getActuatorX() {
         return actuatorX;
     }
-
     public double getActuatorY() {
         return actuatorY;
     }

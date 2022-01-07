@@ -2,6 +2,7 @@ package com.william.boom.GameObject;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -20,7 +21,7 @@ import com.william.boom.Common.Utils;
 public class Player extends Circle {
     public static final double SPEED_PIXELS_PER_SECOND = 400.0;
     public static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
-    public int MAX_HEALTH = 10;
+    public int MAX_HEALTH = 1;
     private int healthPoint = MAX_HEALTH;
 
     private final Joystick joystick;
@@ -33,7 +34,7 @@ public class Player extends Circle {
         this.joystick = joystick;
         this.animatorPlayer = animatorPlayer;
         this.playerState = new PlayerState(this);
-        this.healthBar = new HealthBar(context,this);
+        this.healthBar = new HealthBar(context, this);
 
     }
 
@@ -42,9 +43,32 @@ public class Player extends Circle {
         velocityX = joystick.getActuatorX() * MAX_SPEED;
         velocityY = joystick.getActuatorY() * MAX_SPEED;
 
+        //Log.d("X", "" +joystick.getActuatorX());
+        //Log.d("Y", "" +joystick.getActuatorY());
+        //Right is positive
+        //Left is negative
+
         //Update position
         positionX += velocityX;
         positionY += velocityY;
+        //Log.d("X", "" +velocityX);
+        //Log.d("Y", "" +velocityY);
+
+        /*if (velocityX == 0 && velocityY == 0) {
+            Log.d("Stay", "Stay " + velocityX + "/" + velocityY);
+        }
+        if (velocityY < 0) {
+            Log.d("Up", "Up " + velocityX + "/" + velocityY);
+        }
+        if (velocityY > 0) {
+            Log.d("Down", "Down " + velocityX + "/" + velocityY);
+        }
+        if (velocityX > 0) {
+            Log.d("Right", "Right " + velocityX + "/" + velocityY);
+        }
+        if (velocityX < 0) {
+            Log.d("Left", "Left " + velocityX + "/" + velocityY);
+        }*/
 
         //Update boom direction
         if (velocityX != 0 || velocityY != 0) {
@@ -65,13 +89,14 @@ public class Player extends Circle {
 
     public void draw(Canvas canvas, String obj, GameDisplay gameDisplay) {
         animatorPlayer.draw(canvas, gameDisplay, this);
-        healthBar.draw(canvas,gameDisplay);
+        healthBar.draw(canvas, gameDisplay);
 
     }
 
     public double getPositionX() {
         return positionX;
     }
+
     public double getPositionY() {
         return positionY;
     }
@@ -79,6 +104,7 @@ public class Player extends Circle {
     public int getHealth() {
         return healthPoint;
     }
+
     public void setHealth(int healthPoint) {
         if (healthPoint >= 0)
             this.healthPoint = healthPoint;
