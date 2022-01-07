@@ -50,29 +50,31 @@ public class SpriteSheet {
     public Sprite getBottomRightCornerSprite() {
         return getSpriteByIndex(0, 4);
     }
-    public Sprite getLeftWallSprite() {
-        return getSpriteByIndex(0, 5);
-    }
-    public Sprite getRightWallSprite() {
-        return getSpriteByIndex(0, 6);
-    }
-    public Sprite getTopWallSprite() {
-        return getSpriteByIndex(0, 7);
-    }
+
     public Sprite getBottomWallSprite() {
-        return getSpriteByIndex(0, 8);
+        return getSpriteByIndex(1, 0);
     }
     public Sprite getGrassSprite() {
         return getSpriteByIndex(1, 1);
     }
     public Sprite getTreeTileSprite() {
-        return getSpriteByIndex(1, 1);
-    }
-    public Sprite getStoneTileSprite() {
         return getSpriteByIndex(1, 2);
     }
-    public Sprite getLeafTileSprite() {
+    public Sprite getStoneTileSprite() {
         return getSpriteByIndex(1, 3);
+    }
+    public Sprite getLeafTileSprite() {
+        return getSpriteByIndex(1, 4);
+    }
+
+    public Sprite getTopWallSprite() {
+        return getSpriteByIndex(2, 0);
+    }
+    public Sprite getLeftWallSprite() {
+        return getSpriteByIndex(2, 1);
+    }
+    public Sprite getRightWallSprite() {
+        return getSpriteByIndex(2, 2);
     }
 
 
